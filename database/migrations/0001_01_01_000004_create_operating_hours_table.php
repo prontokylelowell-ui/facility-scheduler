@@ -22,7 +22,9 @@ return new class extends Migration
 
         // Laravel's schema builder has no checkConstraint() method, so the
         // CHECK constraints are added with raw PostgreSQL DDL.
-        DB::statement("ALTER TABLE operating_hours ADD CONSTRAINT operating_hours_day_of_week_check CHECK (day_of_week BETWEEN 0 AND 6);");
+        // day_of_week uses ISO-8601 numbering (1 = Monday ... 7 = Sunday),
+        // matching EXTRACT(ISODOW ...) used by is_facility_available().
+        DB::statement("ALTER TABLE operating_hours ADD CONSTRAINT operating_hours_day_of_week_check CHECK (day_of_week BETWEEN 1 AND 7);");
         DB::statement("ALTER TABLE operating_hours ADD CONSTRAINT operating_hours_time_order_check CHECK (close_time > open_time);");
     }
 

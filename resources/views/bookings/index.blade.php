@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Bookings — Facility Scheduler')
+@section('title', 'Bookings — Resort Booking')
 
 @section('content')
     <h1>

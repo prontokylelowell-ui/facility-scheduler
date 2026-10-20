@@ -1,6 +1,6 @@
 -- =============================================================================
 -- DBA Midterm Project - EXPLAIN ANALYZE Demonstration Script
--- Facility Scheduler - Indexes: Before vs. After
+-- Resort Booking - Indexes: Before vs. After
 -- =============================================================================
 -- Connect as superuser / app_admin before running.
 

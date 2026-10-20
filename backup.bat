@@ -1,6 +1,6 @@
 @echo off
 REM =============================================================================
-REM Facility Scheduler - PostgreSQL Backup Script (Windows)
+REM Resort Booking - PostgreSQL Backup Script (Windows)
 REM Logical backup: pg_dump -Fc (custom compressed format, restorable via pg_restore)
 REM =============================================================================
 

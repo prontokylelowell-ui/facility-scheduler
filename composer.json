@@ -1,6 +1,6 @@
 {
     "name": "pup/facility-scheduler",
-    "description": "Facility Scheduling System - DBA Midterm Project",
+    "description": "Resort Booking System - DBA Midterm Project",
     "type": "project",
     "require": {
         "php": "^8.2",

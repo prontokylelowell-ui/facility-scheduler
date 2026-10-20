@@ -1,5 +1,5 @@
 -- =============================================================================
--- FACILITY SCHEDULER — STANDALONE DB SETUP SCRIPT
+-- RESORT BOOKING — STANDALONE DB SETUP SCRIPT
 -- Use this if you want to demo the database WITHOUT running `php artisan migrate`.
 -- Run as postgres superuser in psql:   \i database/sql/00_master_setup.sql
 -- =============================================================================
@@ -57,7 +57,7 @@ CREATE TABLE facilities (
 CREATE TABLE operating_hours (
     id           SERIAL PRIMARY KEY,
     facility_id  INTEGER NOT NULL REFERENCES facilities(id) ON DELETE CASCADE,
-    day_of_week  SMALLINT NOT NULL CHECK (day_of_week BETWEEN 0 AND 6),
+    day_of_week  SMALLINT NOT NULL CHECK (day_of_week BETWEEN 1 AND 7),
     open_time    TIME NOT NULL,
     close_time   TIME NOT NULL CHECK (close_time > open_time),
     created_at   TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
@@ -267,37 +267,37 @@ INSERT INTO roles (name, description) VALUES
   ('report_viewer',   'Read-only reporting');
 
 INSERT INTO facility_types (name) VALUES
-  ('Meeting Room'),('Lecture Hall'),('Laboratory'),('Gymnasium'),('Auditorium');
+  ('Swimming Pool'),('Function Hall'),('Cottage'),('Sports Court'),('Conference Room'),('Pavilion');
 
 -- Passwords are 'password123' (Laravel hash, using bcrypt cost 10)
 INSERT INTO users (first_name, last_name, email, password, role_id) VALUES
   ('Admin',   'User',     'admin@pup.edu.ph',      '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1),
   ('Report',  'Viewer',   'report@pup.edu.ph',     '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 3),
-  ('Juan',    'Dela Cruz','juan.delacruz@pup.edu.ph','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 2),
-  ('Maria',   'Santos',   'maria.santos@pup.edu.ph','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 2),
-  ('Ana',     'Reyes',    'ana.reyes@pup.edu.ph',  '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 2);
+  ('Juan',    'Dela Cruz','juan.delacruz@gmail.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 2),
+  ('Maria',   'Santos',   'maria.santos@gmail.com','$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 2),
+  ('Ana',     'Reyes',    'ana.reyes@gmail.com',  '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 2);
 
 INSERT INTO facilities (name, facility_type_id, location, capacity) VALUES
-  ('Meeting Room A101',  1, 'Admin Bldg 1st Flr', 12),
-  ('Lecture Hall 301',   2, 'Acad Bldg 3rd Flr', 150),
-  ('Computer Lab 1',     3, 'IT Bldg 1st Flr',    40),
-  ('Main Gymnasium',     4, 'PE Complex',         500),
-  ('University Auditorium', 5, 'Cultural Bldg',   800);
+  ('Main Swimming Pool',   1, 'Resort Grounds',    120),
+  ('Grand Ballroom',       2, 'Convention Center', 300),
+  ('Beachfront Cottage A', 3, 'Beachfront',          6),
+  ('Tennis Court',         4, 'Sports Complex',      4),
+  ('Garden Pavilion',      6, 'Garden Area',       150);
 
 INSERT INTO operating_hours (facility_id, day_of_week, open_time, close_time)
-SELECT f.id, d, '07:00'::time, '20:00'::time
-FROM facilities f CROSS JOIN generate_series(1,5) d;
+SELECT f.id, d, '06:00'::time, '22:00'::time
+FROM facilities f CROSS JOIN generate_series(1,7) d;
 
 INSERT INTO bookings (user_id, facility_id, start_time, end_time, purpose, status) VALUES
-  (3, 1, '2026-10-15 09:00:00+08','2026-10-15 11:00:00+08','Research defense',        'approved'),
-  (4, 2, '2026-10-16 13:00:00+08','2026-10-16 16:00:00+08','Guest lecture',           'pending'),
-  (5, 3, '2026-10-17 08:00:00+08','2026-10-17 12:00:00+08','Database lab session',    'approved'),
-  (3, 4, '2026-10-20 14:00:00+08','2026-10-20 20:00:00+08','Intramurals',             'pending'),
-  (4, 5, '2026-10-25 18:00:00+08','2026-10-25 22:00:00+08','University anniversary',  'approved');
+  (3, 1, '2026-10-15 09:00:00+08','2026-10-15 11:00:00+08','Pool party for birthday',    'approved'),
+  (4, 2, '2026-10-16 13:00:00+08','2026-10-16 16:00:00+08','Beach wedding reception',    'pending'),
+  (5, 3, '2026-10-17 08:00:00+08','2026-10-17 12:00:00+08','Corporate team building',    'approved'),
+  (3, 4, '2026-10-20 14:00:00+08','2026-10-20 20:00:00+08','Family reunion',             'pending'),
+  (4, 5, '2026-10-25 18:00:00+08','2026-10-25 22:00:00+08','Company seminar and workshop','approved');
 
 INSERT INTO blackout_dates (facility_id, blackout_date, reason, is_global) VALUES
-  (NULL, CURRENT_DATE + 30, 'University Holiday', TRUE),
-  (4,    CURRENT_DATE + 7,  'Gym Maintenance',   FALSE);
+  (NULL, CURRENT_DATE + 30, 'Resort-wide Annual Maintenance Day', TRUE),
+  (3,    CURRENT_DATE + 7,  'Beachfront Cottage A Deep Cleaning', FALSE);
 
 \x
 SELECT 'DB setup complete!' AS status,

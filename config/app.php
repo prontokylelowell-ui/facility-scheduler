@@ -2,7 +2,7 @@
 
 return [
 
-    'name' => env('APP_NAME', 'FacilityScheduler'),
+    'name' => env('APP_NAME', 'Resort Booking'),
 
     'env' => env('APP_ENV', 'production'),
 

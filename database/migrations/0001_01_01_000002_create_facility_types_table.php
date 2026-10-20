@@ -16,11 +16,12 @@ return new class extends Migration
         });
 
         DB::table('facility_types')->insert([
-            ['name' => 'Meeting Room', 'description' => 'Small enclosed rooms for meetings'],
-            ['name' => 'Lecture Hall', 'description' => 'Large halls for lectures and events'],
-            ['name' => 'Laboratory', 'description' => 'Computer or science laboratories'],
-            ['name' => 'Gymnasium', 'description' => 'Sports and physical activity facilities'],
-            ['name' => 'Auditorium', 'description' => 'Large venue for performances and ceremonies'],
+            ['name' => 'Swimming Pool', 'description' => 'Pools for swimming and water activities'],
+            ['name' => 'Function Hall', 'description' => 'Indoor halls for events and gatherings'],
+            ['name' => 'Cottage', 'description' => 'Overnight cottages and cabanas'],
+            ['name' => 'Sports Court', 'description' => 'Tennis, basketball and other courts'],
+            ['name' => 'Conference Room', 'description' => 'Rooms for meetings and seminars'],
+            ['name' => 'Pavilion', 'description' => 'Open-air pavilions for outdoor events'],
         ]);
     }
 

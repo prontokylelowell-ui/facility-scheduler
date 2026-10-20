@@ -2,11 +2,11 @@
 
 return [
 
-    'name' => env('APP_NAME', 'FacilityScheduler'),
+    'name' => env('APP_NAME', 'Resort Booking'),
 
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name'    => env('MAIL_FROM_NAME', 'Facility Scheduler'),
+        'name'    => env('MAIL_FROM_NAME', 'Resort Booking'),
     ],
 
     'markdown' => [

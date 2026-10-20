@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Register — Facility Scheduler')
+@section('title', 'Register — Resort Booking')
 
 @section('content')
     <div class="card" style="max-width:430px; margin:0 auto;">

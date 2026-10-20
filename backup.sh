@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================================
-# Facility Scheduler - PostgreSQL Backup Script
+# Resort Booking - PostgreSQL Backup Script
 # Uses pg_dump with custom format (-Fc) for pg_restore compatibility
 # Logical backup: dumps schema + data in a portable, compressed format
 # =============================================================================

@@ -42,12 +42,12 @@ class DatabaseSeeder extends Seeder
 
         $users = collect();
         $names = [
-            ['Juan', 'Dela Cruz', 'juan.delacruz@pup.edu.ph'],
-            ['Maria', 'Santos', 'maria.santos@pup.edu.ph'],
-            ['Ana', 'Reyes', 'ana.reyes@pup.edu.ph'],
-            ['Carlo', 'Fernandez', 'carlo.fernandez@pup.edu.ph'],
-            ['Liza', 'Ramos', 'liza.ramos@pup.edu.ph'],
-            ['Miguel', 'Torres', 'miguel.torres@pup.edu.ph'],
+            ['Juan', 'Dela Cruz', 'juan.delacruz@gmail.com'],
+            ['Maria', 'Santos', 'maria.santos@gmail.com'],
+            ['Ana', 'Reyes', 'ana.reyes@gmail.com'],
+            ['Carlo', 'Fernandez', 'carlo.fernandez@gmail.com'],
+            ['Liza', 'Ramos', 'liza.ramos@gmail.com'],
+            ['Miguel', 'Torres', 'miguel.torres@gmail.com'],
         ];
 
         foreach ($names as [$fn, $ln, $email]) {
@@ -63,16 +63,16 @@ class DatabaseSeeder extends Seeder
         $facilityTypeIds = FacilityType::pluck('id', 'name');
 
         $facilities = [
-            ['name' => 'Meeting Room A101', 'type' => 'Meeting Room', 'location' => 'Admin Building 1st Floor', 'capacity' => 12],
-            ['name' => 'Meeting Room B205', 'type' => 'Meeting Room', 'location' => 'Academic Building 2nd Floor', 'capacity' => 8],
-            ['name' => 'Lecture Hall 301',  'type' => 'Lecture Hall', 'location' => 'Academic Building 3rd Floor', 'capacity' => 150],
-            ['name' => 'Lecture Hall 401',  'type' => 'Lecture Hall', 'location' => 'Academic Building 4th Floor', 'capacity' => 120],
-            ['name' => 'Computer Lab 1',    'type' => 'Laboratory',   'location' => 'IT Building 1st Floor',      'capacity' => 40],
-            ['name' => 'Computer Lab 2',    'type' => 'Laboratory',   'location' => 'IT Building 2nd Floor',      'capacity' => 35],
-            ['name' => 'Physics Laboratory','type' => 'Laboratory',   'location' => 'Science Building 1st Floor', 'capacity' => 30],
-            ['name' => 'Main Gymnasium',    'type' => 'Gymnasium',    'location' => 'PE Complex',                 'capacity' => 500],
-            ['name' => 'Mini Gym',          'type' => 'Gymnasium',    'location' => 'Student Center',             'capacity' => 150],
-            ['name' => 'University Auditorium', 'type' => 'Auditorium', 'location' => 'Cultural Building',       'capacity' => 800],
+            ['name' => 'Main Swimming Pool',        'type' => 'Swimming Pool',   'location' => 'Resort Grounds',       'capacity' => 120],
+            ['name' => 'Kiddie Pool',               'type' => 'Swimming Pool',   'location' => 'Resort Grounds',       'capacity' => 40],
+            ['name' => 'Grand Ballroom',            'type' => 'Function Hall',   'location' => 'Convention Center',    'capacity' => 300],
+            ['name' => 'Garden Pavilion',           'type' => 'Pavilion',        'location' => 'Garden Area',          'capacity' => 150],
+            ['name' => 'Beachfront Cottage A',      'type' => 'Cottage',         'location' => 'Beachfront',           'capacity' => 6],
+            ['name' => 'Beachfront Cottage B',      'type' => 'Cottage',         'location' => 'Beachfront',           'capacity' => 6],
+            ['name' => 'Hillside Cottage',          'type' => 'Cottage',         'location' => 'Hillside',             'capacity' => 4],
+            ['name' => 'Tennis Court',              'type' => 'Sports Court',    'location' => 'Sports Complex',       'capacity' => 4],
+            ['name' => 'Basketball Court',          'type' => 'Sports Court',    'location' => 'Sports Complex',       'capacity' => 10],
+            ['name' => 'Executive Conference Room', 'type' => 'Conference Room', 'location' => 'Convention Center',    'capacity' => 20],
         ];
 
         $facilityRecords = collect();
@@ -88,32 +88,26 @@ class DatabaseSeeder extends Seeder
         }
 
         foreach ($facilityRecords as $facility) {
-            for ($dow = 1; $dow <= 5; $dow++) {
+            for ($dow = 1; $dow <= 7; $dow++) {
                 OperatingHour::create([
                     'facility_id' => $facility->id,
                     'day_of_week' => $dow,
-                    'open_time'   => '07:00:00',
-                    'close_time'  => '20:00:00',
+                    'open_time'   => '06:00:00',
+                    'close_time'  => '22:00:00',
                 ]);
             }
-            OperatingHour::create([
-                'facility_id' => $facility->id,
-                'day_of_week' => 6,
-                'open_time'   => '08:00:00',
-                'close_time'  => '17:00:00',
-            ]);
         }
 
         BlackoutDate::create([
             'blackout_date' => Carbon::today()->addDays(30),
             'is_global'     => true,
-            'reason'        => 'University Holiday',
+            'reason'        => 'Resort-wide Annual Maintenance Day',
         ]);
         BlackoutDate::create([
-            'facility_id'   => $facilityRecords[7]->id,
+            'facility_id'   => $facilityRecords[4]->id,
             'blackout_date' => Carbon::today()->addDays(7),
             'is_global'     => false,
-            'reason'        => 'Annual Gym Maintenance',
+            'reason'        => 'Beachfront Cottage A Deep Cleaning',
         ]);
 
         $bookingCount = 0;
@@ -144,12 +138,12 @@ class DatabaseSeeder extends Seeder
                     'start_time'  => $start,
                     'end_time'    => $end,
                     'purpose'     => [
-                        'Group meeting for research project',
-                        'Class lecture make-up',
-                        'Lab session for CS students',
-                        'Organization event',
-                        'Review session for finals',
-                        'Thesis proposal defense',
+                        'Pool party for birthday',
+                        'Beach wedding reception',
+                        'Corporate team building',
+                        'Family reunion',
+                        'Company seminar and workshop',
+                        'Anniversary celebration',
                     ][random_int(0, 5)],
                     'status' => $status,
                     'admin_remarks' => $status === Booking::STATUS_REJECTED

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Facilities — Facility Scheduler')
+@section('title', 'Facilities — Resort Booking')
 
 @section('content')
     <h1>Facilities <span class="muted">(core entity #1 — full CRUD)</span></h1>
