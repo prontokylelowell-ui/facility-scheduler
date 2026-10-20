@@ -1,0 +1,15 @@
+vendor/
+node_modules/
+.env
+.env.backup
+!.env.example
+.DS_Store
+*.log
+bootstrap/cache/*.php
+storage/framework/cache/**
+storage/framework/sessions/**
+storage/framework/views/**
+storage/logs/**
+backups/*.dump
+backups/*.log
+.phpunit.result.cache
