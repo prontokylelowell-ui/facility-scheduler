@@ -86,6 +86,10 @@ class BookingPageController extends Controller
 
     public function approve(Request $request, Booking $booking)
     {
+        if ($booking->status !== Booking::STATUS_PENDING) {
+            return back()->with('error', 'Only pending bookings can be approved.');
+        }
+
         $request->validate(['remarks' => 'nullable|string|max:255']);
 
         try {
@@ -99,6 +103,10 @@ class BookingPageController extends Controller
 
     public function reject(Request $request, Booking $booking)
     {
+        if ($booking->status !== Booking::STATUS_PENDING) {
+            return back()->with('error', 'Only pending bookings can be rejected.');
+        }
+
         $validated = $request->validate(['remarks' => 'required|string|max:255']);
 
         $booking->reject($validated['remarks']);

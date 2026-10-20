@@ -103,6 +103,12 @@ class BookingController extends Controller
             abort(403, 'Only admins can approve bookings.');
         }
 
+        if ($booking->status !== Booking::STATUS_PENDING) {
+            return response()->json([
+                'message' => 'Only pending bookings can be approved.',
+            ], 422);
+        }
+
         $request->validate([
             'remarks' => 'nullable|string|max:255',
         ]);
@@ -129,6 +135,12 @@ class BookingController extends Controller
     {
         if (!Auth::user()->isAdmin()) {
             abort(403, 'Only admins can reject bookings.');
+        }
+
+        if ($booking->status !== Booking::STATUS_PENDING) {
+            return response()->json([
+                'message' => 'Only pending bookings can be rejected.',
+            ], 422);
         }
 
         $request->validate([
