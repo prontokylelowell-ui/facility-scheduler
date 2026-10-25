@@ -51,4 +51,13 @@ class Facility extends Model
             [$this->id, $startTime, $endTime, $excludeBookingId]
         )->available ?? false;
     }
+
+    public function isBusy(): bool
+    {
+        return $this->bookings()
+            ->where('status', 'approved')
+            ->where('start_time', '<=', now())
+            ->where('end_time', '>=', now())
+            ->exists();
+    }
 }

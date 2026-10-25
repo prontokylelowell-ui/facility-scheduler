@@ -20,14 +20,14 @@ class EnsureUserHasRole
 {
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             abort(401, 'Authentication required.');
         }
 
         $roleName = Auth::user()->role?->name;
 
-        if (!in_array($roleName, $roles, true)) {
-            abort(403, 'Your role (' . ($roleName ?? 'none') . ') is not permitted to access this resource.');
+        if (! in_array($roleName, $roles, true)) {
+            abort(403, 'Your role ('.($roleName ?? 'none').') is not permitted to access this resource.');
         }
 
         return $next($request);

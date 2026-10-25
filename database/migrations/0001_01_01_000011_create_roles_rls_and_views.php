@@ -36,17 +36,17 @@ return new class extends Migration
         // NOINHERIT keeps the principle of least privilege: app_user does NOT
         // automatically gain app_admin's privileges just by being a member —
         // the elevation must be explicit.
-        DB::statement("ALTER ROLE app_admin NOINHERIT;");
-        DB::statement("GRANT app_admin TO app_user;");
+        DB::statement('ALTER ROLE app_admin NOINHERIT;');
+        DB::statement('GRANT app_admin TO app_user;');
 
-        DB::statement("GRANT CONNECT ON DATABASE facility_scheduler TO app_admin, app_user, report_viewer;");
-        DB::statement("GRANT USAGE ON SCHEMA public TO app_admin, app_user, report_viewer;");
+        DB::statement('GRANT CONNECT ON DATABASE facility_scheduler TO app_admin, app_user, report_viewer;');
+        DB::statement('GRANT USAGE ON SCHEMA public TO app_admin, app_user, report_viewer;');
 
         // ---------------------------------------------------------------
         // 2. Privileges (the "two roles with different privileges" requirement)
         // ---------------------------------------------------------------
-        DB::statement("GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO app_admin;");
-        DB::statement("GRANT SELECT, USAGE ON ALL SEQUENCES IN SCHEMA public TO app_user;");
+        DB::statement('GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO app_admin;');
+        DB::statement('GRANT SELECT, USAGE ON ALL SEQUENCES IN SCHEMA public TO app_user;');
 
         $allTables = ['roles', 'users', 'facility_types', 'facilities', 'operating_hours', 'blackout_dates', 'bookings', 'booking_status_log'];
 
@@ -55,13 +55,13 @@ return new class extends Migration
         }
 
         // app_user: read the catalogue, write only its own bookings.
-        DB::statement("GRANT SELECT ON TABLE roles, users, facility_types, facilities, operating_hours, blackout_dates TO app_user;");
-        DB::statement("GRANT SELECT, INSERT, UPDATE ON TABLE bookings TO app_user;");
+        DB::statement('GRANT SELECT ON TABLE roles, users, facility_types, facilities, operating_hours, blackout_dates TO app_user;');
+        DB::statement('GRANT SELECT, INSERT, UPDATE ON TABLE bookings TO app_user;');
 
         // Registration must be able to INSERT a user row (role is forced to
         // app_user by the application; see LoginController::register).
-        DB::statement("GRANT INSERT ON TABLE users TO app_user;");
-        DB::statement("GRANT SELECT ON TABLE booking_status_log TO app_user;");
+        DB::statement('GRANT INSERT ON TABLE users TO app_user;');
+        DB::statement('GRANT SELECT ON TABLE booking_status_log TO app_user;');
 
         // ---------------------------------------------------------------
         // 3. Row Level Security
@@ -72,8 +72,8 @@ return new class extends Migration
         // login. Column-level safety for users is handled by only exposing
         // first_name/last_name/email/role to the app.
         // ---------------------------------------------------------------
-        DB::statement("ALTER TABLE bookings           ENABLE ROW LEVEL SECURITY;");
-        DB::statement("ALTER TABLE booking_status_log ENABLE ROW LEVEL SECURITY;");
+        DB::statement('ALTER TABLE bookings           ENABLE ROW LEVEL SECURITY;');
+        DB::statement('ALTER TABLE booking_status_log ENABLE ROW LEVEL SECURITY;');
 
         foreach ([
             'own_bookings_select', 'own_bookings_insert', 'own_bookings_update',
@@ -81,8 +81,8 @@ return new class extends Migration
         ] as $policy) {
             DB::statement("DROP POLICY IF EXISTS {$policy} ON bookings;");
         }
-        DB::statement("DROP POLICY IF EXISTS own_status_log ON booking_status_log;");
-        DB::statement("DROP POLICY IF EXISTS admin_all_tables_log ON booking_status_log;");
+        DB::statement('DROP POLICY IF EXISTS own_status_log ON booking_status_log;');
+        DB::statement('DROP POLICY IF EXISTS admin_all_tables_log ON booking_status_log;');
 
         // --- bookings: SELECT own rows -------------------------------------
         DB::statement("
@@ -118,12 +118,12 @@ return new class extends Migration
         ");
 
         // --- bookings: admin sees/does everything --------------------------
-        DB::statement("
+        DB::statement('
             CREATE POLICY admin_all_tables_bookings ON bookings
             TO app_admin
             USING (true)
             WITH CHECK (true);
-        ");
+        ');
 
         // --- booking_status_log: read logs of your own bookings ------------
         DB::statement("
@@ -138,11 +138,11 @@ return new class extends Migration
             );
         ");
 
-        DB::statement("
+        DB::statement('
             CREATE POLICY admin_all_tables_log ON booking_status_log
             TO app_admin
             USING (true);
-        ");
+        ');
 
         // ---------------------------------------------------------------
         // 4. Reporting views (read-only surface for report_viewer)
@@ -183,25 +183,25 @@ return new class extends Migration
             ORDER BY b.start_time DESC;
         ");
 
-        DB::statement("GRANT SELECT ON report_bookings_summary, report_user_booking_history TO report_viewer;");
-        DB::statement("GRANT SELECT ON ALL TABLES IN SCHEMA public TO report_viewer;");
+        DB::statement('GRANT SELECT ON report_bookings_summary, report_user_booking_history TO report_viewer;');
+        DB::statement('GRANT SELECT ON ALL TABLES IN SCHEMA public TO report_viewer;');
     }
 
     public function down(): void
     {
-        DB::statement("DROP VIEW IF EXISTS report_user_booking_history;");
-        DB::statement("DROP VIEW IF EXISTS report_bookings_summary;");
+        DB::statement('DROP VIEW IF EXISTS report_user_booking_history;');
+        DB::statement('DROP VIEW IF EXISTS report_bookings_summary;');
 
-        DB::statement("ALTER TABLE booking_status_log DISABLE ROW LEVEL SECURITY;");
-        DB::statement("ALTER TABLE bookings DISABLE ROW LEVEL SECURITY;");
+        DB::statement('ALTER TABLE booking_status_log DISABLE ROW LEVEL SECURITY;');
+        DB::statement('ALTER TABLE bookings DISABLE ROW LEVEL SECURITY;');
 
-        DB::statement("REVOKE ALL ON ALL TABLES IN SCHEMA public FROM app_admin, app_user, report_viewer;");
-        DB::statement("REVOKE ALL ON ALL SEQUENCES IN SCHEMA public FROM app_admin, app_user;");
-        DB::statement("REVOKE USAGE ON SCHEMA public FROM app_admin, app_user, report_viewer;");
-        DB::statement("REVOKE ALL ON DATABASE facility_scheduler FROM app_admin, app_user, report_viewer;");
+        DB::statement('REVOKE ALL ON ALL TABLES IN SCHEMA public FROM app_admin, app_user, report_viewer;');
+        DB::statement('REVOKE ALL ON ALL SEQUENCES IN SCHEMA public FROM app_admin, app_user;');
+        DB::statement('REVOKE USAGE ON SCHEMA public FROM app_admin, app_user, report_viewer;');
+        DB::statement('REVOKE ALL ON DATABASE facility_scheduler FROM app_admin, app_user, report_viewer;');
 
-        DB::statement("DROP ROLE IF EXISTS report_viewer;");
-        DB::statement("DROP ROLE IF EXISTS app_user;");
-        DB::statement("DROP ROLE IF EXISTS app_admin;");
+        DB::statement('DROP ROLE IF EXISTS report_viewer;');
+        DB::statement('DROP ROLE IF EXISTS app_user;');
+        DB::statement('DROP ROLE IF EXISTS app_admin;');
     }
 };

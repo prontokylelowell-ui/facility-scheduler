@@ -58,17 +58,17 @@ return new class extends Migration
             \$\$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
         ");
 
-        DB::statement("
+        DB::statement('
             CREATE TRIGGER trg_booking_status_change
             AFTER INSERT OR UPDATE OF status ON bookings
             FOR EACH ROW
             EXECUTE FUNCTION log_booking_status_change();
-        ");
+        ');
     }
 
     public function down(): void
     {
-        DB::statement("DROP TRIGGER IF EXISTS trg_booking_status_change ON bookings;");
-        DB::statement("DROP FUNCTION IF EXISTS log_booking_status_change();");
+        DB::statement('DROP TRIGGER IF EXISTS trg_booking_status_change ON bookings;');
+        DB::statement('DROP FUNCTION IF EXISTS log_booking_status_change();');
     }
 };

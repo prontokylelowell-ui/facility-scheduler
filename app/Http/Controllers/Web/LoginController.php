@@ -25,11 +25,11 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email'    => 'required|email',
+            'email' => 'required|email',
             'password' => 'required|string',
         ]);
 
-        if (!Auth::attempt($credentials)) {
+        if (! Auth::attempt($credentials)) {
             throw ValidationException::withMessages([
                 'email' => 'The provided credentials do not match our records.',
             ]);
@@ -41,7 +41,7 @@ class LoginController extends Controller
         $request->session()->regenerate();
 
         return redirect()->intended(route('facilities.index'))
-            ->with('success', 'Welcome back, ' . Auth::user()->full_name . '!');
+            ->with('success', 'Welcome back, '.Auth::user()->full_name.'!');
     }
 
     public function showRegister()
@@ -53,19 +53,19 @@ class LoginController extends Controller
     {
         $validated = $request->validate([
             'first_name' => 'required|string|max:50',
-            'last_name'  => 'required|string|max:50',
-            'email'      => 'required|email|max:100|unique:users,email',
-            'password'   => 'required|string|min:6|confirmed',
+            'last_name' => 'required|string|max:50',
+            'email' => 'required|email|max:100|unique:users,email',
+            'password' => 'required|string|min:6|confirmed',
         ]);
 
         $userRoleId = DB::table('roles')->where('name', 'app_user')->value('id');
 
         $user = User::create([
             'first_name' => $validated['first_name'],
-            'last_name'  => $validated['last_name'],
-            'email'      => $validated['email'],
-            'password'   => Hash::make($validated['password']),
-            'role_id'    => $userRoleId,      // never trust a role posted from the form
+            'last_name' => $validated['last_name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'role_id' => $userRoleId,      // never trust a role posted from the form
         ]);
 
         Auth::login($user);

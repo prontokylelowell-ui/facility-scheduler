@@ -14,28 +14,28 @@ class AuthController extends Controller
     {
         $validated = $request->validate([
             'first_name' => 'required|string|max:50',
-            'last_name'  => 'required|string|max:50',
-            'email'      => 'required|email|unique:users,email|max:100',
-            'password'   => 'required|string|min:6|confirmed',
+            'last_name' => 'required|string|max:50',
+            'email' => 'required|email|unique:users,email|max:100',
+            'password' => 'required|string|min:6|confirmed',
         ]);
 
         $userRoleId = \DB::table('roles')->where('name', 'app_user')->value('id');
 
         $user = User::create([
             'first_name' => $validated['first_name'],
-            'last_name'  => $validated['last_name'],
-            'email'      => $validated['email'],
-            'password'   => Hash::make($validated['password']),
-            'role_id'    => $userRoleId,
+            'last_name' => $validated['last_name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'role_id' => $userRoleId,
         ]);
 
         return response()->json([
             'message' => 'Registration successful.',
             'data' => [
-                'id'    => $user->id,
-                'name'  => $user->full_name,
+                'id' => $user->id,
+                'name' => $user->full_name,
                 'email' => $user->email,
-                'role'  => $user->role->name,
+                'role' => $user->role->name,
             ],
         ], 201);
     }
@@ -43,13 +43,13 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $validated = $request->validate([
-            'email'    => 'required|email',
+            'email' => 'required|email',
             'password' => 'required|string',
         ]);
 
         $user = User::with('role')->where('email', $validated['email'])->first();
 
-        if (!$user || !Hash::check($validated['password'], $user->password)) {
+        if (! $user || ! Hash::check($validated['password'], $user->password)) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
             ]);
@@ -65,10 +65,10 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Login successful.',
             'data' => [
-                'id'    => $user->id,
-                'name'  => $user->full_name,
+                'id' => $user->id,
+                'name' => $user->full_name,
                 'email' => $user->email,
-                'role'  => $user->role->name,
+                'role' => $user->role->name,
             ],
         ]);
     }
@@ -88,10 +88,10 @@ class AuthController extends Controller
 
         return response()->json([
             'data' => [
-                'id'    => $user->id,
-                'name'  => $user->full_name,
+                'id' => $user->id,
+                'name' => $user->full_name,
                 'email' => $user->email,
-                'role'  => $user->role->name,
+                'role' => $user->role->name,
             ],
         ]);
     }

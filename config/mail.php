@@ -6,7 +6,7 @@ return [
 
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name'    => env('MAIL_FROM_NAME', 'Resort Booking'),
+        'name' => env('MAIL_FROM_NAME', 'Resort Booking'),
     ],
 
     'markdown' => [

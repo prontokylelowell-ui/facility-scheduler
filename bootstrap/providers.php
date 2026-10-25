@@ -1,5 +1,7 @@
 <?php
 
+use App\Providers\AppServiceProvider;
+
 return [
 
     /*
@@ -11,6 +13,6 @@ return [
     | config/app.php under the `providers` key.
     */
 
-    App\Providers\AppServiceProvider::class,
+    AppServiceProvider::class,
 
 ];

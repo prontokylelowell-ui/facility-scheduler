@@ -19,7 +19,7 @@ class BookingController extends Controller
     {
         $query = Booking::with(['user', 'facility.facilityType', 'statusLogs']);
 
-        if (!Auth::user()->isAdmin()) {
+        if (! Auth::user()->isAdmin()) {
             $query->where('user_id', Auth::id());
         } else {
             if ($request->filled('user_id')) {
@@ -52,9 +52,9 @@ class BookingController extends Controller
     {
         $validated = $request->validate([
             'facility_id' => 'required|exists:facilities,id',
-            'start_time'  => 'required|date',
-            'end_time'    => 'required|date|after:start_time',
-            'purpose'     => 'required|string|max:255',
+            'start_time' => 'required|date',
+            'end_time' => 'required|date|after:start_time',
+            'purpose' => 'required|string|max:255',
         ]);
 
         $facility = Facility::findOrFail($validated['facility_id']);
@@ -64,7 +64,7 @@ class BookingController extends Controller
             $validated['end_time']
         );
 
-        if (!$isAvailable) {
+        if (! $isAvailable) {
             return response()->json([
                 'message' => 'The requested time slot conflicts with an existing pending/approved booking or falls on a blackout date.',
                 'errors' => ['facility_id' => ['Facility is not available at the requested time.']],
@@ -72,23 +72,23 @@ class BookingController extends Controller
         }
 
         $booking = Booking::create([
-            'user_id'     => Auth::id(),
+            'user_id' => Auth::id(),
             'facility_id' => $validated['facility_id'],
-            'start_time'  => $validated['start_time'],
-            'end_time'    => $validated['end_time'],
-            'purpose'     => $validated['purpose'],
-            'status'      => Booking::STATUS_PENDING,
+            'start_time' => $validated['start_time'],
+            'end_time' => $validated['end_time'],
+            'purpose' => $validated['purpose'],
+            'status' => Booking::STATUS_PENDING,
         ]);
 
         return response()->json([
             'message' => 'Booking created successfully. Status: pending.',
-            'data'    => $booking->load('facility.facilityType'),
+            'data' => $booking->load('facility.facilityType'),
         ], 201);
     }
 
     public function show(Booking $booking)
     {
-        if (!Auth::user()->isAdmin() && $booking->user_id !== Auth::id()) {
+        if (! Auth::user()->isAdmin() && $booking->user_id !== Auth::id()) {
             abort(403, 'Unauthorized to view this booking.');
         }
 
@@ -99,7 +99,7 @@ class BookingController extends Controller
 
     public function approve(Request $request, Booking $booking)
     {
-        if (!Auth::user()->isAdmin()) {
+        if (! Auth::user()->isAdmin()) {
             abort(403, 'Only admins can approve bookings.');
         }
 
@@ -133,7 +133,7 @@ class BookingController extends Controller
 
     public function reject(Request $request, Booking $booking)
     {
-        if (!Auth::user()->isAdmin()) {
+        if (! Auth::user()->isAdmin()) {
             abort(403, 'Only admins can reject bookings.');
         }
 
@@ -157,11 +157,11 @@ class BookingController extends Controller
 
     public function cancel(Booking $booking)
     {
-        if (!Auth::user()->isAdmin() && $booking->user_id !== Auth::id()) {
+        if (! Auth::user()->isAdmin() && $booking->user_id !== Auth::id()) {
             abort(403, 'Unauthorized to cancel this booking.');
         }
 
-        if (!in_array($booking->status, [Booking::STATUS_PENDING, Booking::STATUS_APPROVED])) {
+        if (! in_array($booking->status, [Booking::STATUS_PENDING, Booking::STATUS_APPROVED])) {
             return response()->json([
                 'message' => 'Only pending or approved bookings can be cancelled.',
             ], 422);

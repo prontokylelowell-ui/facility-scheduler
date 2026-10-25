@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Facility;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -39,7 +40,7 @@ class FacilityController extends Controller
     {
         $validated = $request->validate([
             'start_time' => 'required|date',
-            'end_time'   => 'required|date|after:start_time',
+            'end_time' => 'required|date|after:start_time',
         ]);
 
         $available = DB::selectOne(
@@ -62,19 +63,19 @@ class FacilityController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'             => 'required|string|max:150|unique:facilities,name',
+            'name' => 'required|string|max:150|unique:facilities,name',
             'facility_type_id' => 'required|integer|exists:facility_types,id',
-            'location'         => 'required|string|max:200',
-            'capacity'         => 'required|integer|min:1',
-            'notes'            => 'nullable|string',
-            'is_active'        => 'sometimes|boolean',
+            'location' => 'required|string|max:200',
+            'capacity' => 'required|integer|min:1',
+            'notes' => 'nullable|string',
+            'is_active' => 'sometimes|boolean',
         ]);
 
         $facility = Facility::create($validated);
 
         return response()->json([
             'message' => 'Facility created successfully.',
-            'data'    => $facility->load('facilityType'),
+            'data' => $facility->load('facilityType'),
         ], 201);
     }
 
@@ -84,19 +85,19 @@ class FacilityController extends Controller
     public function update(Request $request, Facility $facility)
     {
         $validated = $request->validate([
-            'name'             => 'sometimes|required|string|max:150|unique:facilities,name,' . $facility->id,
+            'name' => 'sometimes|required|string|max:150|unique:facilities,name,'.$facility->id,
             'facility_type_id' => 'sometimes|required|integer|exists:facility_types,id',
-            'location'         => 'sometimes|required|string|max:200',
-            'capacity'         => 'sometimes|required|integer|min:1',
-            'notes'            => 'nullable|string',
-            'is_active'        => 'sometimes|boolean',
+            'location' => 'sometimes|required|string|max:200',
+            'capacity' => 'sometimes|required|integer|min:1',
+            'notes' => 'nullable|string',
+            'is_active' => 'sometimes|boolean',
         ]);
 
         $facility->update($validated);
 
         return response()->json([
             'message' => 'Facility updated successfully.',
-            'data'    => $facility->fresh()->load('facilityType'),
+            'data' => $facility->fresh()->load('facilityType'),
         ]);
     }
 
@@ -107,7 +108,7 @@ class FacilityController extends Controller
     {
         try {
             $facility->delete();
-        } catch (\Illuminate\Database\QueryException $e) {
+        } catch (QueryException $e) {
             return response()->json([
                 'message' => 'Cannot delete: facility still has related bookings (FK ON DELETE RESTRICT).',
             ], 409);

@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->index(['status', 'start_time']);
         });
 
-        DB::statement("ALTER TABLE bookings ADD CONSTRAINT bookings_end_time_check CHECK (end_time > start_time);");
+        DB::statement('ALTER TABLE bookings ADD CONSTRAINT bookings_end_time_check CHECK (end_time > start_time);');
         DB::statement("ALTER TABLE bookings ADD CONSTRAINT bookings_status_check CHECK (status IN ('pending','approved','rejected','cancelled'));");
     }
 

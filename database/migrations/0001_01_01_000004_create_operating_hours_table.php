@@ -24,8 +24,8 @@ return new class extends Migration
         // CHECK constraints are added with raw PostgreSQL DDL.
         // day_of_week uses ISO-8601 numbering (1 = Monday ... 7 = Sunday),
         // matching EXTRACT(ISODOW ...) used by is_facility_available().
-        DB::statement("ALTER TABLE operating_hours ADD CONSTRAINT operating_hours_day_of_week_check CHECK (day_of_week BETWEEN 1 AND 7);");
-        DB::statement("ALTER TABLE operating_hours ADD CONSTRAINT operating_hours_time_order_check CHECK (close_time > open_time);");
+        DB::statement('ALTER TABLE operating_hours ADD CONSTRAINT operating_hours_day_of_week_check CHECK (day_of_week BETWEEN 1 AND 7);');
+        DB::statement('ALTER TABLE operating_hours ADD CONSTRAINT operating_hours_time_order_check CHECK (close_time > open_time);');
     }
 
     public function down(): void

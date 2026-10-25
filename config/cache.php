@@ -5,7 +5,7 @@ return [
     'stores' => [
         'file' => [
             'driver' => 'file',
-            'path'   => storage_path('framework/cache/data'),
+            'path' => storage_path('framework/cache/data'),
         ],
     ],
     'prefix' => 'facility_scheduler_',

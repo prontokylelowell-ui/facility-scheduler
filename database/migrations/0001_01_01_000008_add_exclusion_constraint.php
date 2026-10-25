@@ -7,7 +7,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        DB::statement("CREATE EXTENSION IF NOT EXISTS btree_gist;");
+        DB::statement('CREATE EXTENSION IF NOT EXISTS btree_gist;');
 
         DB::statement("
             ALTER TABLE bookings ADD CONSTRAINT no_overlap
@@ -20,6 +20,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        DB::statement("ALTER TABLE bookings DROP CONSTRAINT IF EXISTS no_overlap;");
+        DB::statement('ALTER TABLE bookings DROP CONSTRAINT IF EXISTS no_overlap;');
     }
 };

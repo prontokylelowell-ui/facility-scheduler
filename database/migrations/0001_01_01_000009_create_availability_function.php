@@ -68,6 +68,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        DB::statement("DROP FUNCTION IF EXISTS is_facility_available(INTEGER, TIMESTAMPTZ, TIMESTAMPTZ, INTEGER);");
+        DB::statement('DROP FUNCTION IF EXISTS is_facility_available(INTEGER, TIMESTAMPTZ, TIMESTAMPTZ, INTEGER);');
     }
 };
